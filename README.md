@@ -17,7 +17,7 @@ The training and inference scripts are designed to work with **SLAM: A Comprehen
 
 **Publication:** [Link to the SLAM dataset (to be added upon release)]  
 
-### looped_clips.csv description: 
+### Looped_clips.csv description: 
 
 1. the csv is designed to indicate which clips adopt the loop complement strategy, and the dataset users can choose whether to adopt the above clips according to their own needs. 
 

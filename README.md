@@ -17,6 +17,14 @@ The training and inference scripts are designed to work with **SLAM: A Comprehen
 
 **Publication:** [Link to the SLAM dataset (to be added upon release)]  
 
+# looped_clips.csv description: 
+
+- the csv is designed to indicate which clips adopt the loop complement strategy, and the dataset users can choose whether to adopt the above clips according to their own needs. 
+
+- the csv includes the clip path `loop_path`, the dataset division `phase`, part id `part_id`, and the frame number at which the loop is started `loop_start_frame`;
+
+- The loop part is the interval `[loop_start_frame, 30]`.
+
 ---
 
 ## Environment

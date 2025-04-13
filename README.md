@@ -19,9 +19,9 @@ The training and inference scripts are designed to work with **SLAM: A Comprehen
 
 ### Looped_clips.csv description: 
 
-1. the csv is designed to indicate which clips adopt the loop complement strategy, and the dataset users can choose whether to adopt the above clips according to their own needs. 
+1. The CSV is designed to indicate which clips adopt the loop complement strategy, and the dataset users can choose whether to adopt the above clips according to their own needs. 
 
-2. the csv includes the clip path `loop_path`, the dataset division `phase`, part id `part_id`, and the frame number at which the loop is started `loop_start_frame`;
+2. The CSV includes the clip path `loop_path`, the dataset division `phase`, part id `part_id`, and the frame number at which the loop is started `loop_start_frame`;
 
 3. The loop part is the interval `[loop_start_frame, 30]`.
 ---

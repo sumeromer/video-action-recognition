@@ -15,7 +15,7 @@ The training and inference scripts are designed to work with **SLAM: A Comprehen
 2. **Annotations:** Each video clip is labeled with one of several predefined surgical actions.
 3. **Structure:** The dataset consists of training, validation, and test splits.
 
-**Publication:** [Link to the SLAM dataset (to be added upon release)]  
+**Publication:** [(https://www.nature.com/articles/s41597-025-05093-7)]  
 
 ### Looped_clips.csv description: 
 
@@ -32,7 +32,7 @@ The environment setup for these scripts is the same as required for the ViViT mo
 ---
 
 ## Dataset Preparation
-1. Download the SLAM dataset from the official [dataset repository](#) (link will be added upon release).
+1. Download the SLAM dataset from the official [dataset repository](https://doi.org/10.6084/m9.figshare.28104782.v3).
 
 ---
 

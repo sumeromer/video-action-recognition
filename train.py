@@ -23,7 +23,11 @@ log_interval = 300
 height = width = 768
 
 img_size = height  # Since height = width
-log_file_name = (f'/root/SLAM-Vivit_Cls/logs/{img_size}_BS{batch_size}_FR{time_size}_training.log')
+log_dir = f'./logs/SLAM-Vivit_Cls'
+weights_dir = f'{log_dir}/weights'
+os.makedirs(log_dir, exist_ok=True)
+os.makedirs(weights_dir, exist_ok=True)
+log_file_name = f'{log_dir}/{img_size}_BS{batch_size}_FR{time_size}_training.log'
 logging.basicConfig(filename=log_file_name, level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 
@@ -64,11 +68,10 @@ class ClipsDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        # relative_video_path = self.data_label.iloc[idx, 0].replace("\\", "/")  # Replace backslashes with forward slashes
         relative_video_path = self.data_label.iloc[idx, 1]
-        video_path = os.path.join(self.data_path, "clips", relative_video_path)
+        video_name = os.path.basename(relative_video_path)  # Extract only the file name
+        video_path = os.path.join(self.data_path, "videos", video_name)
         label = label_dict[self.data_label.iloc[idx, 2]]
-
 
         container = av.open(video_path)
         frames = []
@@ -136,8 +139,8 @@ def get_gpu_memory_usage():
     return allocated_memory, reserved_memory
 
 def train():
-    train_data_path = "/mnt/data/LaparoClipsP1"
-    val_data_path = "/mnt/data/LaparoClipsP1"
+    train_data_path = "/home/o773r/Desktop/workspace/gitlab/video-action-recognition/data/SLAM" # "/mnt/data/LaparoClipsP1"
+    val_data_path =  "/home/o773r/Desktop/workspace/gitlab/video-action-recognition/data/SLAM" # "/mnt/data/LaparoClipsP1"
     train_csv_file = os.path.join(train_data_path, "train.csv")
     val_csv_file = os.path.join(val_data_path, "val.csv")
 
@@ -229,7 +232,7 @@ def train():
 
         if val_accuracy > best_val_accuracy:
             best_val_accuracy = val_accuracy
-            model_save_path = f"/root/SLAM-Vivit_Cls/weights/best_model_{height}_BS{batch_size}_FR{time_size}_val_acc_{best_val_accuracy:.4f}.pkl"
+            model_save_path = f"{weights_dir}/best_model_{height}_BS{batch_size}_FR{time_size}_val_acc_{best_val_accuracy:.4f}.pkl"
             torch.save(model.state_dict(), model_save_path)
 
             test_log_message = f"New best model saved with accuracy: {best_val_accuracy:.4f}"

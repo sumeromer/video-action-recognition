@@ -1,0 +1,10 @@
+# Python bytecode files
+./__pycache__/*
+
+# SLAM dataset (all files listed here as a reference)
+./data/SLAM/Artifact_file.csv
+./data/SLAM/looped_clips.csv
+./data/SLAM/train.csv
+./data/SLAM/val.csv
+./data/SLAM/test.csv
+./data/SLAM/videos/*.mp4

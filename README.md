@@ -8,10 +8,10 @@
 
 This is a video action recognition project for surgical procedures, specifically focused on analyzing laparoscopic surgery clips from the SLAM dataset. The project implements deep learning models to classify surgical actions from video sequences.
 
-#### Reference paper:  
+* **Reference paper:**  
 Ye, Z., Zhou, R., Deng, Z. et al. A Comprehensive Video Dataset for Surgical Laparoscopic Action Analysis. Sci Data 12, 862 (2025). https://doi.org/10.1038/s41597-025-05093-7
 
-#### Author implementation (Github repository):  
+* **Author implementation (Github repository):**  
 https://github.com/yezizi1022/SLAM-Vivit_Cls
 
 > In the author implementation, the python requirement files (dependencies) and some other stuff are a bit unorganized. Here, I forked their version in the ```dev-SLAM```branch and I keep my revised version in the ```main```branch. The reason why I want to replicate and make them in a torch/torch-lightning codebase is to try out differentr video recognition backbones and compare their performance on surgical action recognition.
@@ -53,24 +53,19 @@ conda activate surgical-vision
 - TIMM 1.0.19 for vision models
 - MLflow, Wandb, TensorBoard for experiment tracking
 
-## Common Commands
+## Training and Evaluation
 
-**Environment setup**:
-```bash
-conda env create -f environment.yaml
-conda activate surgical-vision
-```
-
-**Run training**: 
+**Start training**: 
 ```bash
 python train.py SLAM-Vivit-Cls.yaml --mode=train
 ```
-
-**Training logs**: Check `logs/` directory for training outputs
+>Training logs: Check `logs/` directory for training outputs
 
 **Evaluate the given trained snapshot on test data:**  
 ```bash
-python evaluate.py --config config/SLAM-Vivit-Cls-eval.yaml --checkpoint path/to/model.ckpt 
+python evaluate.py \  
+    --config config/SLAM-Vivit-Cls-eval.yaml \  
+    --checkpoint path/to/model.ckpt 
 ```
 
 ## Development Notes

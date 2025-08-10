@@ -1,0 +1,79 @@
+dataset:
+  name: SLAM
+  data_path: ./data/SLAM
+  train_csv: train.csv
+  val_csv: val.csv
+  test_csv: test.csv
+  video_subdir: videos
+  classes:
+    UseClipper: 0
+    HookCut: 1
+    PanoView: 2
+    Suction: 3
+    AbdominalEntry: 4
+    Needle: 5
+    LocPanoView: 6
+  num_classes: 7
+
+video_processing:
+  height: 768
+  width: 768
+  time_size: 16
+  resize_shape: [768, 768]
+
+data_loader:
+  batch_size: 2  
+  num_workers: 6
+  pin_memory: true
+  shuffle_train: true
+  shuffle_val: false
+  persistent_workers: false
+
+augmentation:
+  train:
+    random_horizontal_flip: true
+    random_rotation: 20
+    color_jitter:
+      brightness: 0.2
+      contrast: 0.2
+      saturation: 0.2
+    random_affine:
+      degrees: 0
+      translate: [0.1, 0.1]
+      scale: [0.9, 1.1]
+  val:
+    enabled: true
+
+model:
+  name: vivit
+  architecture: vision_transformer
+  input_channels: 3
+  patch_size: [16, 16] # patch size for ViViT
+  embed_dim: 192       # dim
+  num_heads: 3         # heads
+  num_layers: 4        # layers
+  dropout: 0.1
+
+training:
+  epochs: 100
+  learning_rate: 7e-5
+  weight_decay: 0.01
+  optimizer: adamw
+  scheduler: none  # Disable scheduler to match original paper
+  enable_early_stopping: false  # Disable early stopping to train full 100 epochs
+
+logging:
+  experiment_name: E002-Vivit-ActionReg-SLAM
+  log_dir: ./logs
+  save_checkpoints: true
+  checkpoint_frequency: 1  # Save checkpoint every epoch to track best models
+  log_frequency: 50
+  use_wandb: true
+  wandb:
+    api_key: "9ee482ee6577bd707f27a33b702469d975c89c31"  # Set your WANDB_API_KEY here or via environment variable
+    project: "video-action-recognition"
+    entity: "oemer-suemer"   # Optional: your wandb username/team
+    tags: ["vivit", "surgical", "slam-dataset", "video-classification"]
+    notes: "ViViT model training on SLAM surgical video dataset"
+    group: "vivit-experiments"
+    job_type: "train"

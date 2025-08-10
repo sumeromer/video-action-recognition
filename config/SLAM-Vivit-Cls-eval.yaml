@@ -1,0 +1,111 @@
+dataset:
+  name: SLAM
+  data_path: ./data/SLAM
+  train_csv: train.csv
+  val_csv: val.csv
+  test_csv: test.csv
+  video_subdir: videos
+  classes:
+    UseClipper: 0
+    HookCut: 1
+    PanoView: 2
+    Suction: 3
+    AbdominalEntry: 4
+    Needle: 5
+    LocPanoView: 6
+  num_classes: 7
+
+video_processing:
+  height: 768
+  width: 768
+  time_size: 16
+  resize_shape: [768, 768]
+
+data_loader:
+  batch_size: 4  # Can use larger batch size for evaluation since no gradients
+  num_workers: 6
+  pin_memory: true
+  shuffle_train: false  # No shuffling needed for evaluation
+  shuffle_val: false
+  persistent_workers: false
+
+augmentation:
+  train:
+    enabled: false  # No augmentation for evaluation
+  val:
+    enabled: false  # No augmentation for evaluation
+
+model:
+  name: vivit
+  architecture: vision_transformer
+  input_channels: 3
+  patch_size: [16, 16] # patch size for ViViT
+  embed_dim: 192       # dim
+  num_heads: 3         # heads
+  num_layers: 4        # layers
+  dropout: 0.1
+
+# Evaluation-specific settings
+evaluation:
+  # Path to the trained model checkpoint
+  model_checkpoint_path: "./logs/E002-Vivit-ActionReg-SLAM/weights/best-acc-91-0.8282-0.8927.ckpt"
+  
+  # Output directory for evaluation results
+  output_dir: "./outputs/E002-Vivit-ActionReg-SLAM/evaluation"
+  
+  # Device settings
+  device: "auto"  # auto, cpu, cuda
+  precision: "16-mixed"  # Use same precision as training
+  
+  # Test-Time Augmentation (TTA) settings
+  tta:
+    enabled: true  # Set to true to enable TTA by default
+    n_transforms: 6  # Number of base TTA transform types (max 6 available)
+    n_samples_per_transform: 2  # Number of samples to generate per transform type
+    # Total samples = 1 (original) + (n_transforms - 1) × n_samples_per_transform
+    # Example: 1 + (6-1) × 2 = 1 + 10 = 11 total samples per video
+    
+    # Available transform types:
+    # 1. Original (no augmentation)
+    # 2. Horizontal flip
+    # 3. Small rotation (random within range)
+    # 4. Color jitter (random within range) 
+    # 5. Affine transformation (random within range)
+    # 6. Combined transforms (mix of multiple augmentations)
+    
+    # TTA transform parameters (fine-tune these if needed)
+    transforms:
+      horizontal_flip: true
+      rotation_range: [-10, 10]  # degrees range for random rotation
+      color_jitter:
+        brightness: [0.8, 1.2]  # range for random brightness
+        contrast: [0.8, 1.2]    # range for random contrast
+        saturation: [0.8, 1.2]  # range for random saturation
+        hue: [-0.1, 0.1]        # range for random hue
+      affine:
+        degrees: [-5, 5]        # range for random rotation
+        translate: [0.0, 0.05]  # range for random translation
+        scale: [0.95, 1.05]     # range for random scaling
+        shear: [-2, 2]          # range for random shearing
+  
+  # Metrics to compute
+  metrics:
+    - accuracy
+    - balanced_accuracy  
+    - f1_score
+    - precision
+    - recall
+    - per_class_accuracy
+    - confusion_matrix
+  
+  # Save detailed results
+  save_results: true
+  save_predictions: true
+  save_confusion_matrix: true
+
+logging:
+  experiment_name: E002-Vivit-ActionReg-SLAM-Eval
+  log_dir: ./logs
+  save_checkpoints: false  # No checkpoints needed for evaluation
+  log_frequency: 50
+  use_wandb: false  # Disable wandb for evaluation to keep it simple

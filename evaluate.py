@@ -380,6 +380,31 @@ def evaluate_with_tta(model, config: DictConfig, device: str, n_tta: int = 6) ->
     return results
 
 
+def convert_numpy_types(obj):
+    """
+    Recursively convert NumPy data types to native Python types for JSON serialization.
+    
+    Args:
+        obj: Object potentially containing NumPy types
+        
+    Returns:
+        Object with NumPy types converted to native Python types
+    """
+    if isinstance(obj, np.integer):
+        return int(obj)
+    elif isinstance(obj, np.floating):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, dict):
+        # Convert keys and values recursively
+        return {str(k) if isinstance(k, np.integer) else k: convert_numpy_types(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [convert_numpy_types(item) for item in obj]
+    else:
+        return obj
+
+
 def save_results(results: Dict[str, Any], output_dir: str, config: DictConfig):
     """
     Save evaluation results to files.
@@ -395,10 +420,13 @@ def save_results(results: Dict[str, Any], output_dir: str, config: DictConfig):
     # Create timestamp for this evaluation
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
+    # Convert NumPy types to native Python types for JSON serialization
+    json_serializable_results = convert_numpy_types(results)
+    
     # Save comprehensive results as JSON
     results_file = output_path / f"evaluation_results_{timestamp}.json"
     with open(results_file, 'w') as f:
-        json.dump(results, f, indent=2)
+        json.dump(json_serializable_results, f, indent=2)
     print(f"Results saved to: {results_file}")
     
     # Save confusion matrix as CSV

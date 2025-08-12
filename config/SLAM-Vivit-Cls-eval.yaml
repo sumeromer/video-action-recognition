@@ -51,7 +51,7 @@ evaluation:
   model_checkpoint_path: "./logs/E002-Vivit-ActionReg-SLAM/weights/best-acc-91-0.8282-0.8927.ckpt"
   
   # Output directory for evaluation results
-  output_dir: "./outputs/E002-Vivit-ActionReg-SLAM/evaluation"
+  output_dir: "./logs/E002-Vivit-ActionReg-SLAM/evaluation"
   
   # Device settings
   device: "auto"  # auto, cpu, cuda
@@ -59,7 +59,7 @@ evaluation:
   
   # Test-Time Augmentation (TTA) settings
   tta:
-    enabled: true  # Set to true to enable TTA by default
+    enabled: false  # Set to true to enable TTA by default
     n_transforms: 6  # Number of base TTA transform types (max 6 available)
     n_samples_per_transform: 2  # Number of samples to generate per transform type
     # Total samples = 1 (original) + (n_transforms - 1) × n_samples_per_transform

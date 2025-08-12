@@ -14,7 +14,7 @@ import time
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Set up logging
-log_file_name = '/root/SLAM-Vivit_Cls/logs/output_wave_768_class11_testing.log'
+log_file_name = './logs/SLAM-Vivit_Cls/test_output_val_acc_08513.log'
 logging.basicConfig(filename=log_file_name, level=logging.INFO, format='%(asctime)s - %(message)s')
 
 # Helper functions
@@ -32,7 +32,7 @@ def plot_confusion_matrix(cm, class_names):
         plt.text(j, i, f"{cm[i, j]}", ha='center', va='center',
                  color='white' if cm[i, j] > thresh else 'black')
     plt.tight_layout()
-    plt.savefig("/root/SLAM-Vivit_Cls/output/wave_confusion_matrix.jpg")
+    plt.savefig("./logs/SLAM-Vivit_Cls/test_wave_confusion_matrix.jpg")
     plt.show()
 
 def calculate_gflops_and_parameters(model, input_size):
@@ -81,8 +81,8 @@ def test(model, test_loader, class_names):
 
 if __name__ == "__main__":
     # Test dataset and loader setup
-    test_data_path = "/mnt/data/LaparoClipsP1"
-    test_csv_file = "/mnt/data/LaparoClipsP1/test.csv"
+    test_data_path = "./data/SLAM" # "/mnt/data/LaparoClipsP1"
+    test_csv_file = "./data/SLAM/test.csv" # "/mnt/data/LaparoClipsP1/test.csv"
 
     # Define the transform (same as validation in training)
     test_transform = transforms.Compose([transforms.ToTensor()])
@@ -92,8 +92,9 @@ if __name__ == "__main__":
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
 
     # Model setup
-    model_path = "/root/SLAM-Vivit_Cls/weights/best_model_wave_11Cls_768_BS4_FR16_val_acc_0.8564.pkl"
-
+    #model_path = "/root/SLAM-Vivit_Cls/weights/best_model_wave_11Cls_768_BS4_FR16_val_acc_0.8564.pkl"
+    model_path = "./logs/SLAM-Vivit_Cls/weights/best_model_768_BS2_FR16_val_acc_0.8513.pkl"
+    
     class_names = [
           "UseClipper", "HookCut", "PanoView", "Suction", "AbdominalEntry", "Needle", "LocPanoView"
     ]
@@ -101,7 +102,7 @@ if __name__ == "__main__":
     height = width = 768
     img_size = height  # Since height = width
     time_size = 16
-    model = ViViT(height, 16, 11, time_size)
+    model = ViViT(height, 16, 7, time_size) # ViViT(height, 16, 11, time_size)
     model.load_state_dict(torch.load(model_path))
     model.to(device)
 

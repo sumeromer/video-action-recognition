@@ -139,8 +139,8 @@ def get_gpu_memory_usage():
     return allocated_memory, reserved_memory
 
 def train():
-    train_data_path = "/home/o773r/Desktop/workspace/gitlab/video-action-recognition/data/SLAM" # "/mnt/data/LaparoClipsP1"
-    val_data_path =  "/home/o773r/Desktop/workspace/gitlab/video-action-recognition/data/SLAM" # "/mnt/data/LaparoClipsP1"
+    train_data_path = "./data/SLAM" # "/mnt/data/LaparoClipsP1"
+    val_data_path =  "./data/SLAM" # "/mnt/data/LaparoClipsP1"
     train_csv_file = os.path.join(train_data_path, "train.csv")
     val_csv_file = os.path.join(val_data_path, "val.csv")
 
